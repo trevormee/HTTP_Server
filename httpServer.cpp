@@ -1,43 +1,126 @@
-
+#include <stdio.h>          
+#include <stdlib.h>         
+#include <sys/socket.h>     
+#include <sys/types.h>      
+#include <netinet/in.h>    
 #include <iostream>
+#include <unistd.h>
+#include <fstream>
+#include <sstream>
 
-//TCP Server
-// Create Socket > bind the IP and port for the socket > listen on port > accept connection > send data > close socket
+const int PORT = 60001;
 
-#include <stdio.h>          //Standard library
-#include <stdlib.h>         //Standard library
-#include <sys/socket.h>     //API and definitions for the sockets
-#include <sys/types.h>      //more definitions
-#include <netinet/in.h>     //Structures to store address information
+void handleClient(int client_fd)
+{
+    char buffer[4096] = {0};
 
-int main() {
+    // read request from client
+    ssize_t bytesRead = read(client_fd, buffer, sizeof(buffer));
+    if(bytesRead < 0)
+    {
+        perror("Error reading from socket");
+        return;
+    }
+    std::cout << "Received request: " << buffer << std::endl;
 
-    char tcp_server_message[256] = " Hello, I am the TCP Server you successfully connected to!! \n\n               Bye Bye!!!\n\n";
+    // parse the http request
+    std::istringstream request(buffer);
+    std::string method, path, version;
+    request >> method >> path >> version;
+    std::string response;
+    
+    if(method == "GET")
+    {
+        std::ifstream file("." + path);
+        std::cout << "path: " << path << std::endl;
 
-    //create the server socket
-    int tcp_server_socket;                                  //variable for the socket descriptor
-    tcp_server_socket = socket(AF_INET, SOCK_STREAM, 0);    //calling the socket function. Params: Domain of the socket (Internet in this case), type of socket stream (TCP), Protocol (default, 0 for TCP)
+        if (file) {
 
-    //define the server address
-    struct sockaddr_in tcp_server_address;                  //declaring a structure for the address
-    tcp_server_address.sin_family = AF_INET;                //Structure Fields' definition: Sets the address family of the address the client would connect to
-    tcp_server_address.sin_port = htons(39756);             //Passing the port number - converting in right network byte order
-    tcp_server_address.sin_addr.s_addr = INADDR_ANY;        //Connecting to 0.0.0.0
+            std::ostringstream content;
+            
+            content << file.rdbuf();
 
-    // binding the socket to the IP address and port
-    bind(tcp_server_socket, (struct sockaddr *) &tcp_server_address, sizeof(tcp_server_address));  //Params: which socket, cast for server address, its size
+            std::string contentType = "text/html"; // Default content type
 
-    //listen for simultaneous connections
-    listen(tcp_server_socket, 5);  //which socket, how many connections
+            response = "HTTP/1.1 200 OK\r\nContent-Type: "+ contentType + "\r\n\r\n" + content.str();
+            
+        } else {
+            std::string error_message = "<html><body><h1>404 Not Found</h1></body></html>";
+            response = "HTTP/1.1 404 Not Found\r\n";
+            response += "Content-Type: text/html\r\n";
+            response += "Content-Length: " + std::to_string(error_message.size()) + "\r\n";
+            response += "\r\n";
+            response += error_message;
+        }
 
-    int tcp_client_socket;
-    tcp_client_socket = accept(tcp_server_socket, NULL, NULL);  // server socket to interact with client, structure like before - if you know - else NULL for local connection
+    }
+    else
+    {
+        // handle other methods
+        response = "HTTP/1.1 404 Not found\r\n\r\n";
+    }
 
-    //send data stream
-    send(tcp_client_socket, tcp_server_message, sizeof(tcp_server_message), 0);  // send where, what, how much, flags (optional)
+    write(client_fd, response.c_str(), response.size());
+    
+}
 
-    //close the socket
-    //close(tcp_server_socket);
+
+int main()
+{
+    int server_fd;
+    
+    // create the server socket
+    if((server_fd = socket(AF_INET, SOCK_STREAM, 0)) < 0)
+    {
+        perror("socket failed");
+        exit(EXIT_FAILURE);
+    }   
+
+    // define server address
+    struct sockaddr_in server_address;
+    server_address.sin_family = AF_INET;
+    server_address.sin_port = htons(PORT);
+    server_address.sin_addr.s_addr = INADDR_ANY;
+
+    // bind the socket
+    if(bind(server_fd, (struct sockaddr *)&server_address, sizeof(server_address)) < 0)
+    {
+        perror("bind failed");
+        exit(EXIT_FAILURE);
+    }
+
+    std::cout << "Server listening on port: " << PORT << std::endl;
+
+    // listen for connections
+    if(listen(server_fd, 5) < 0)
+    {
+        perror("listen failed");
+        exit(EXIT_FAILURE);
+    }
+
+    std::cout << "Server waiting for connection..." << std::endl;
+
+    while(true)
+    {
+        int client_fd;
+
+        // accept a connection
+        if((client_fd = accept(server_fd, NULL, NULL)) < 0)
+        {
+            perror("accept failed");
+            exit(EXIT_FAILURE);
+        }
+        std::cout << "Connection established with client" << std::endl;
+
+        // handle client request
+        handleClient(client_fd);
+
+        // close the client socket
+        close(client_fd);
+    }
+
+    // close the server socket
+    close(server_fd);
 
     return 0;
 }
