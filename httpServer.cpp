@@ -1,7 +1,9 @@
 /***************************************************************
   Student Name: Trevor Mee
   File Name: httpServer.cpp
+  Date: 01/28/2025
   Project 1
+  COP4635 - Systems & Networks 2
 
   @brief Simple HTTP server that uses TCP sockets to handle 
          GET requests
@@ -66,13 +68,6 @@ void handleClient(int client_fd)
         } else {
             std::string error_message = "404 Not Found";
             response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n" + error_message;
-            /*
-            response = "HTTP/1.1 404 Not Found\r\n";
-            response += "Content-Type: text/html\r\n";
-            response += "Content-Length: " + std::to_string(error_message.size()) + "\r\n";
-            response += "\r\n";
-            response += error_message;
-            */
         }
     }
     else
