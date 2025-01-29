@@ -66,8 +66,8 @@ void handleClient(int client_fd)
             response = "HTTP/1.1 200 OK\r\nContent-Type: "+ contentType + "\r\n\r\n" + content.str();
             
         } else {
-            std::string error_message = "404 Not Found";
-            response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n" + error_message;
+            std::string errorMsg = "404 Not Found";
+            response = "HTTP/1.1 404 Not Found\r\nContent-Type: text/html\r\n\r\n" + errorMsg;
         }
     }
     else
