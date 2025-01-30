@@ -61,7 +61,7 @@ void handleClient(int client_fd)
             
             content << file.rdbuf();
 
-            std::string contentType = "text/html"; // Default content type
+            std::string contentType = "text/html"; 
 
             response = "HTTP/1.1 200 OK\r\nContent-Type: "+ contentType + "\r\n\r\n" + content.str();
             
@@ -91,7 +91,7 @@ void handleClient(int client_fd)
 */
 void signalHandler(int signal)
 {
-    std::cout << "Received signal: " << signal << ", shutting server down" << std::endl;
+    std::cout << "\nReceived signal: " << signal << ", shutting server down" << std::endl;
     exit(signal);
 }
 
