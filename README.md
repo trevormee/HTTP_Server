@@ -6,6 +6,8 @@ Trevor Mee
 
 ## Compilation and Running
 
+- Use WSL for compiling and running this program
+
 1. **Ensure that port 60001 is available to be opened**
 
 2. **Navigate into the projects root directory**
