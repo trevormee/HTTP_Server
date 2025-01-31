@@ -16,6 +16,7 @@ Trevor Mee
 - testPresence.html
 
 **Screen_Captures Directory**
+
 Navigate into the Screen_Captures directory to find 4 screenshots of the project working on my end.
 - working_clientServer_index.png: Displays a screen shot of the client and server communicating to display 'index.html' on a web broswer.
 - working_clientServer_dragon.png: Displays a screen shot of the client and server communicating to display 'img.jpg' on a web browser.
