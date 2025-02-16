@@ -2,7 +2,7 @@
   Student Name: Trevor Mee
   File Name: httpServer.cpp
   Date: 01/28/2025
-  Project 1
+  Project 2
   COP4635 - Systems & Networks 2
 
   @brief Simple HTTP server that uses TCP sockets to handle 

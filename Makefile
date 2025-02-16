@@ -1,15 +1,24 @@
 CXX = g++
 CXXFLAGS = -std=c++11 -g -Wall
 
-OBJS = httpServer.o 
+SERVER_OBJS = httpServer.o
+CLIENT_OBJS = httpClient.o
 
-proj1 : ${OBJS}
-		${CXX} $(CXXFLAGS) -o $@ ${OBJS}
+all: httpServer httpClient
 
- 
-httpServer.o : httpServer.cpp
+httpServer: $(SERVER_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(SERVER_OBJS)
 
-clean :
-		rm ${OBJS}
+httpClient: $(CLIENT_OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $(CLIENT_OBJS)
+
+httpServer.o: httpServer.cpp
+	$(CXX) $(CXXFLAGS) -c httpServer.cpp
+
+httpClient.o: httpClient.cpp
+	$(CXX) $(CXXFLAGS) -c httpClient.cpp
+
+clean:
+	rm -f httpServer httpClient $(SERVER_OBJS) $(CLIENT_OBJS)
 
 .PHONY: all clean
