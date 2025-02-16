@@ -9,8 +9,7 @@ Trevor Mee
 - httpServer.cpp (source code for the HTTP Server)
 - httpClient.cpp (source code for the HTTP Client)
 - Makefile
-- Protocol_Document_P1.pdf
-- proj1 (executable)
+- Protocol_Document_P2.pdf
 - README.md
 - img.jpg
 - index.html
