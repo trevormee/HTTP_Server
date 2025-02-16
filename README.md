@@ -19,10 +19,10 @@ Trevor Mee
 **Screen_Captures Directory**
 
 Navigate into the Screen_Captures directory to find 4 screenshots of the project working on my end.
-- working_clientServer_index.png: Displays a screen shot of the client and server communicating to display 'index.html' on a web broswer.
-- working_clientServer_dragon.png: Displays a screen shot of the client and server communicating to display 'img.jpg' on a web browser.
-- invalid_clientServer_htmlFile.png: Displays a screen shot of the client and server communicating to display an error message for an invalid html file.
-- shut_down_server.png: Displays a screen shot of the connection being broken between the client and server after the server has been shut down.
+- p2_client_server_connection.png: Displays an image of the server and client successfully working via two terminals on the UWF SSH server.
+- p2_server_browser_404.png: Displays an image of the HTTP server and client (working as a browser) successfully, but not being able to render a fake html page.
+- p2_server_browser_dragon.png: Displays an image of the HTTP server and client (working as a browser) successfully and rendering testPresence.html with the img.jpg image of a dragon.
+- p2_server_browser_index.png: Displays an image of the HTTP server and client (working as a browser) successfully and rendering index.html.
 
 ## Notes for Grader
 This project was developed utilizing WSL. Please use WSL when grading this program. Note that my project does compile and run on the SSH server, but you will not be able to test the browser as a client on the SSH server. 
