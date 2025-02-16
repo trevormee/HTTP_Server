@@ -23,42 +23,6 @@ const int SERVER_PORT = 60001;
     @brief sends http requests to server and processes server responses
 
     @param client_fd: file descriptor of the client
-
-    @return N/A
-*/
-void handleRequests(int client_fd)
-{
-    char buffer[4096] = {0};
-
-    // send http request
-    std::string request = "GET /index.html HTTP/1.1\r\nHost: localhost\r\n\r\n";
-    ssize_t bytesSent = send(client_fd, request.c_str(), request.length(), 0);
-    if(bytesSent < 0)
-    {
-        perror("FAILED: Could not send your request to the server");
-        return;
-    }
-
-    std::cout << "Request sent successfully!\n" << request << std::endl;
-
-    // receive server response
-    ssize_t bytesRead = read(client_fd, buffer, sizeof(buffer) - 1);
-    if(bytesRead < 0)
-    {
-        perror("FAILED: Error receving response from server");
-        return;
-    }else
-    {
-        buffer[bytesRead] = '\0';
-        std::cout << "Response from server received successfully!\n" << buffer << std::endl;
-    }
-}
-
-
-/*
-    @brief sends http requests to server and processes server responses
-
-    @param client_fd: file descriptor of the client
     @param fileRequest: file being requested by the client
 
     @return N/A
@@ -68,7 +32,6 @@ void handleRequests(int client_fd, std::string fileRequested)
     char buffer[4096] = {0};
 
     // send http request
-    // std::string request = "GET /index.html HTTP/1.1\r\nHost: localhost\r\n\r\n";
     std::string request = "GET /" + fileRequested + " HTTP/1.1\r\nHost: localhost\r\n\r\n";
     ssize_t bytesSent = send(client_fd, request.c_str(), request.length(), 0);
     if(bytesSent < 0)
@@ -113,11 +76,17 @@ int main()
 
     std::cout << "Client socket created successfully!" << std::endl;
 
+    std::string serverAddr;
+    std::cout << "\nWhat is the address of the HTTP Server that you want to connect to?" << std::endl;
+    std::cin >> serverAddr;
+
     // define server address
+    const char* cstrServerAddr = serverAddr.c_str();
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(SERVER_PORT);
-    inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
+    //inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
+    inet_pton(AF_INET, cstrServerAddr, &server_address.sin_addr);
 
     // connect to the server
     if(connect(client_fd, (struct sockaddr *)&server_address, sizeof(server_address)) < 0 )
@@ -126,44 +95,19 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    std::cout << "Client connected to server at " << SERVER_IP << std::endl;
-    
+    //std::cout << "Client connected to server at " << SERVER_IP << std::endl;
+    std::cout << "Client connected to server at " << cstrServerAddr << std::endl;
+
+    // prompt the user for a requested file
     std::string fileName;
-    std::cout << "What file do you want?" << std::endl;
+    std::cout << "\nWhat file do you want?" << std::endl;
     std::cin >> fileName;
 
     // send http requests and receive responses
-    //handleRequests(client_fd);
     handleRequests(client_fd, fileName);
     
-    // BONUS
-    /*
-    int userChoice;
-    std::cout << "\nSelect an option (1 or 2)" << std::endl;
-    std::cout << "1. Get a file from server "<< std::endl;
-    std::cout << "2. Send a text message to server" << std::endl;
-    std::cin >> userChoice;
-
-    if(userChoice == 1){
-    std::string fileName;
-    std::cout << "What file do you want?" << std::endl;
-    std::cin >> fileName;
-
-    // send http requests and receive responses
-    //handleRequests(client_fd);
-        handleRequests(client_fd, fileName);
-    }else if (userChoice == 2)
-    {
-        std::string textMsg;    
-        std::cout << "\n Enter your text message to send" << std::endl;
-        std::cin >> textMsg; 
-        sendText(client_fd, textMsg);
-    }else{
-        std::cerr << "Invalid choice. Must choose 1 or 2!"
-    }
-    */
-
     // close the client connection
+    std::cout << "Closing the client" << std::endl;
     close(client_fd);    
 
     return 0;
