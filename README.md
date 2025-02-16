@@ -57,6 +57,7 @@ This project was developed utilizing WSL. Please use WSL when grading this progr
 
 ## Usage
 There are a couple options when one wants to view how the http methods are sent and received between the server and the client.
+
 **Option 1**
 1) Open two terminals (one terminal will be for the server, the other terminal will be for the client)
 2) Compile and run the server in one of the terminals (see instructions above for compilation and running).
@@ -64,6 +65,7 @@ There are a couple options when one wants to view how the http methods are sent 
 4) Once the connection has been established between the client and server, you will be prompted with a question in the client side terminal asking "What file do you want?"
 5) Simply type in the name of the file you want to request from the server (note that the file you request must be located in the root directory of this project) and press enter.
 6) You will see outputs of information on both the server and client window.
+
 **Option 2**
 1) Open a terminal.
 2) Compile and run ther server (see instructions above for compilation and running).
