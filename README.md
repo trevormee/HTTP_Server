@@ -57,6 +57,7 @@ This project was developed utilizing WSL, however it has been tested on the UWF 
 ```
 
 5. **Client Notes**
+
 Once the client begins running, you will be prompted with two questions. The first question will ask you what server IP address you want to connect your client too. The second question will ask you what file you want to "GET" from the server. See the following section, Usage, for more information with testing and running this project!
 
 ## Usage
