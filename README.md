@@ -17,7 +17,9 @@ Trevor Mee
 
 **Screen_Captures Directory**
 
-Navigate into the Screen_Captures directory to find 4 screenshots of the project working on my end.
+Navigate into the Screen_Captures directory to find 6 screenshots of the project working on my end.
+- p2_client_server_connection_establishment.png: Displays an image of the client successfully establishing a connection to a server.
+- p2_client_server_terminal_indexhtml.png: Displays an image of the client successfully receiving index.html from the server.
 - p2_client_server_connection.png: Displays an image of the server and client successfully working via two terminals on the UWF SSH server.
 - p2_server_browser_404.png: Displays an image of the HTTP server and client (working as a browser) successfully, but not being able to render a fake html page.
 - p2_server_browser_dragon.png: Displays an image of the HTTP server and client (working as a browser) successfully and rendering testPresence.html with the img.jpg image of a dragon.
@@ -54,6 +56,9 @@ This project was developed utilizing WSL, however it has been tested on the UWF 
     ./httpClient
 ```
 
+5. **Client Notes**
+Once the client begins running, you will be prompted with two questions. The first question will ask you what server IP address you want to connect your client too. The second question will ask you what file you want to "GET" from the server. See the following section, Usage, for more information with testing and running this project!
+
 ## Usage
 There are a couple options when one wants to view how the HTTP methods are sent and received between the server and the client.
 
@@ -61,9 +66,11 @@ There are a couple options when one wants to view how the HTTP methods are sent 
 1) Open two terminals (one terminal will be for the server, the other terminal will be for the client)
 2) Compile and run the server in one of the terminals (see instructions above for compilation and running).
 3) Compile and run the client in the other terminal (see instructions above for compilation and running).
-4) Once the connection has been established between the client and server, you will be prompted with a question in the client side terminal asking "What file do you want?"
-5) Simply type in the name of the file you want to request from the server (note that the file you request must be located in the root directory of this project) and press enter.
-6) You will see outputs of information on both the server and client window.
+4) Once the client is running, you will be prompted in the client side terminal asking "What is the address of the HTTP Server that you want to connect to?"
+5) Simply type in the IP address that you want the client to connect to (e.g., '127.0.0.1').
+6) Once the connection has been established between the client and server, you will be prompted with a question in the client side terminal asking "What file do you want?"
+7) Simply type in the name of the file you want to request from the server (note that the file you request must be located in the root directory of this project) and press enter.
+8) You will see outputs of information on both the server and client window.
 
 **Option 2**
 1) Open a terminal.

@@ -16,7 +16,6 @@
 #include <unistd.h>
 #include <cstring>
 
-const char *SERVER_IP = "127.0.0.1"; // Localhost
 const int SERVER_PORT = 60001;
 
 /*
@@ -37,6 +36,7 @@ void handleRequests(int client_fd, std::string fileRequested)
     if(bytesSent < 0)
     {
         perror("FAILED: Could not send your request to the server");
+        close(client_fd);
         return;
     }
 
@@ -76,6 +76,7 @@ int main()
 
     std::cout << "Client socket created successfully!" << std::endl;
 
+    // prompt the user for the server address
     std::string serverAddr;
     std::cout << "\nWhat is the address of the HTTP Server that you want to connect to?" << std::endl;
     std::cin >> serverAddr;
@@ -85,8 +86,13 @@ int main()
     struct sockaddr_in server_address;
     server_address.sin_family = AF_INET;
     server_address.sin_port = htons(SERVER_PORT);
-    //inet_pton(AF_INET, SERVER_IP, &server_address.sin_addr);
-    inet_pton(AF_INET, cstrServerAddr, &server_address.sin_addr);
+    
+    if((inet_pton(AF_INET, cstrServerAddr, &server_address.sin_addr)) < 0)
+    {
+        perror("ERROR: Invalid IP Address. Closing client and exiting...");
+        close(client_fd);
+        exit(EXIT_FAILURE);
+    }
 
     // connect to the server
     if(connect(client_fd, (struct sockaddr *)&server_address, sizeof(server_address)) < 0 )
@@ -95,7 +101,6 @@ int main()
         exit(EXIT_FAILURE);
     }
 
-    //std::cout << "Client connected to server at " << SERVER_IP << std::endl;
     std::cout << "Client connected to server at " << cstrServerAddr << std::endl;
 
     // prompt the user for a requested file
