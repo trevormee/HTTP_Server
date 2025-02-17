@@ -55,6 +55,44 @@ void handleRequests(int client_fd, std::string fileRequested)
     }
 }
 
+/*
+    @brief sends http requests to server and processes server responses
+
+    @param client_fd: file descriptor of the client
+    @param fileRequest: file being requested by the client
+
+    @return N/A
+*/
+void handleRequests(int client_fd, std::string fileRequested, const char* serverAddr)
+{
+    char buffer[4096] = {0};
+
+    // send http request
+    //std::string request = "GET /" + fileRequested + " HTTP/1.1\r\nHost: localhost\r\n\r\n";
+    std::string request = "GET /" + fileRequested + " HTTP/1.1\r\nHost: " + serverAddr + "\r\n\r\n";
+    ssize_t bytesSent = send(client_fd, request.c_str(), request.length(), 0);
+    if(bytesSent < 0)
+    {
+        perror("FAILED: Could not send your request to the server");
+        close(client_fd);
+        return;
+    }
+
+    std::cout << "Request sent successfully!\n" << request << std::endl;
+
+    // receive server response
+    ssize_t bytesRead = read(client_fd, buffer, sizeof(buffer) - 1);
+    if(bytesRead < 0)
+    {
+        perror("FAILED: Error receving response from server");
+        return;
+    }else
+    {
+        buffer[bytesRead] = '\0';
+        std::cout << "Response from server received successfully!\n" << buffer << std::endl;
+    }
+}
+
 
 /*
     @brief main function
@@ -109,7 +147,8 @@ int main()
     std::cin >> fileName;
 
     // send http requests and receive responses
-    handleRequests(client_fd, fileName);
+    //handleRequests(client_fd, fileName);
+    handleRequests(client_fd, fileName, cstrServerAddr);
     
     // close the client connection
     std::cout << "Closing the client" << std::endl;
