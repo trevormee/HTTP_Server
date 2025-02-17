@@ -78,7 +78,7 @@ int main()
 
     // prompt the user for the server address
     std::string serverAddr;
-    std::cout << "\nWhat is the address of the HTTP Server that you want to connect to?" << std::endl;
+    std::cout << "\nWhat is the IP address of the HTTP Server that you want to connect to?" << std::endl;
     std::cin >> serverAddr;
 
     // define server address
